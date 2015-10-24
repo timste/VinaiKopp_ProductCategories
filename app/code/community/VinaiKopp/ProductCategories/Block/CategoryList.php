@@ -96,10 +96,13 @@ class VinaiKopp_ProductCategories_Block_CategoryList extends Mage_Catalog_Block_
      */
     public function getCategories()
     {
+        $rootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+        
         $categories = $this->_getData('categories');
         if (is_null($categories)) {
             $categories = $this->getProduct()->getCategoryCollection()
                 ->addIsActiveFilter()
+                ->addAttributeToFilter('path', array('like' => "1/{$rootCategoryId}/%"))
                 ->addNameToResult()
                 ->addUrlRewriteToResult()->getItems();
             $categories = $this->_filterOutCategoriesThatAreAlsoParent($categories);
